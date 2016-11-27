@@ -6,6 +6,10 @@ var WebSocketServer = require('websocket').server;
 var clients = [];
 
 process.title = 'multisweep-server';
+process.on('SIGINT', function() {
+    console.log("Exiting...");
+    process.exit();
+});
 
 var server = http.createServer(function(request, response) {
     console.log((new Date()) + ' Received request for ' + request.url);

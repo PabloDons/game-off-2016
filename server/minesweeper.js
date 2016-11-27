@@ -1,4 +1,5 @@
 function ms(size, numbombs) {
+    this.numbombs = numbombs;
     this.size = {y:size,x:Math.round((size/9)*16)};
     this.map = [];
     this.flags = 0;
@@ -7,13 +8,12 @@ function ms(size, numbombs) {
     for (var i=0;i<this.size.y;i++){
         this.map[i]=[];
         for (var j=0;j<this.size.x;j++){
-            var ret = {
+            this.map[i][j] = {
                 isB:false,
                 sel:false,
                 numOfAdj:0,
                 flagged:false,
             };
-            this.map[i][j] = ret;
         }
     }
 
@@ -27,32 +27,25 @@ function ms(size, numbombs) {
             continue;
         } else {
             this.map[bomb.y][bomb.x].isB = true;
-        }
-    }
-
-    for (var i=0;i<this.size.y;i++){
-        for (var j=0;j<this.size.x;j++){
-            if (this.map[i][j].isB){
-                if (i!==0) {
-                    this.map[i-1][j].numOfAdj+=1;
-                    if (j!==0) {
-                        this.map[i-1][j-1].numOfAdj+=1;
-                    } if (j!==this.size.x-1) {
-                        this.map[i-1][j+1].numOfAdj+=1;
-                    }
-                } if (i!==this.size.y-1) {
-                    this.map[i+1][j].numOfAdj+=1;
-                    if (j!==0) {
-                        this.map[i+1][j-1].numOfAdj+=1;
-                    } if (j!==this.size.x-1) {
-                        this.map[i+1][j+1].numOfAdj+=1;
-                    }
+            if (bomb.y!==0) {
+                this.map[bomb.y-1][bomb.x].numOfAdj+=1;
+                if (bomb.x!==0) {
+                    this.map[bomb.y-1][bomb.x-1].numOfAdj+=1;
+                } if (bomb.x!==this.size.x-1) {
+                    this.map[bomb.y-1][bomb.x+1].numOfAdj+=1;
                 }
-                if (j!==0) {
-                    this.map[i][j-1].numOfAdj+=1;
-                } if (j!==this.size.x-1) {
-                    this.map[i][j+1].numOfAdj+=1;
+            } if (bomb.y!==this.size.y-1) {
+                this.map[bomb.y+1][bomb.x].numOfAdj+=1;
+                if (bomb.x!==0) {
+                    this.map[bomb.y+1][bomb.x-1].numOfAdj+=1;
+                } if (bomb.x!==this.size.x-1) {
+                    this.map[bomb.y+1][bomb.x+1].numOfAdj+=1;
                 }
+            }
+            if (bomb.x!==0) {
+                this.map[bomb.y][bomb.x-1].numOfAdj+=1;
+            } if (bomb.x!==this.size.x-1) {
+                this.map[bomb.y][bomb.x+1].numOfAdj+=1;
             }
         }
     }
